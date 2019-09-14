@@ -1,3 +1,6 @@
+import json
+from lxml import etree
+from lxml.etree import tostring
 
 PLAIN = "plain"
 PLAIN_UP = "plain_uppercase"
@@ -5,7 +8,7 @@ PLAIN_LO = "plain_lowercase"
 JSON = "json"
 XML = "xml"
 SUPPORTED = [PLAIN, PLAIN_UP, PLAIN_LO, JSON]
-import json
+
 
 def get_formatted(msg, imie, format):
     result = ""
@@ -24,15 +27,25 @@ def get_formatted(msg, imie, format):
 
 def format_to_json(msg, imie):
     data = {
-    "imie": imie,
-    "msg": msg
+        "imie": imie,
+        "msg": msg
     }
     y = json.dumps(data)
-    return (y)
+    return y
+
+
+#
+# def format_to_xml(msg, imie):
+#     return ('<greetings>' + '<name>' + imie + '</name>' + '<msg>' + msg +
+#             '</msg>' + '</greetings>')
 
 def format_to_xml(msg, imie):
-    return ( '<greetings>' + '<name>'  + imie  + '</name>' + '<msg>' +  msg + '</msg>' + '</greetings>')
-
+    root = etree.Element('greetings')
+    a = etree.SubElement(root, 'name')
+    a.text = 'Natalia'
+    elem_msg = etree.SubElement(root, 'msg')
+    elem_msg.text = msg
+    return tostring(root)
 
 
 def plain_text(msg, imie):
